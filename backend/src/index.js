@@ -19,6 +19,29 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Root endpoint
+app.get("/", (req, res) => {
+  res.json({
+    message: "🚀 StockSense Enterprise Backend API is running!",
+    status: "ok",
+    version: "1.0.0",
+    frontend_app: "http://localhost:5173",
+    api_endpoints: {
+      health: "/api/health",
+      auth: "/api/auth",
+      products: "/api/products",
+      locations: "/api/locations",
+      operations: "/api/operations",
+      receipts: "/api/receipts",
+      deliveries: "/api/deliveries",
+      transfers: "/api/transfers",
+      adjustments: "/api/adjustments",
+      ledger: "/api/ledger",
+      dashboard: "/api/dashboard"
+    }
+  });
+});
+
 // API Route Mounts
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", app: "StockSense API Server" });

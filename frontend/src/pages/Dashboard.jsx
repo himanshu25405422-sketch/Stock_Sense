@@ -1,16 +1,7 @@
-import { Link } from "react-router-dom";
-import { Package, AlertTriangle, Ban, ArrowDownToLine, Truck, ArrowLeftRight, TrendingUp } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Package, AlertTriangle, Ban, ArrowDownToLine, Truck, ArrowLeftRight, TrendingUp, Warehouse as WarehouseIcon } from "lucide-react";
 import { Card, StatusBadge } from "../components/UI";
-import { operations } from "../data";
-
-const stats = [
-  ["Total Products in Stock", "1,250", "+12%", Package, "bg-blue-50 text-blue-600"],
-  ["Low Stock Items", "35", "+5%", AlertTriangle, "bg-red-50 text-red-600"],
-  ["Out of Stock Items", "8", "+2%", Ban, "bg-amber-50 text-amber-600"],
-  ["Pending Receipts", "12", "", ArrowDownToLine, "bg-emerald-50 text-emerald-600"],
-  ["Pending Deliveries", "18", "", Truck, "bg-violet-50 text-violet-600"],
-  ["Transfers Scheduled", "7", "", ArrowLeftRight, "bg-cyan-50 text-cyan-600"],
-];
 
 function getCurrentUser() {
   try {
@@ -21,8 +12,71 @@ function getCurrentUser() {
 }
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const currentUser = getCurrentUser();
   const firstName = currentUser.full_name ? currentUser.full_name.trim().split(" ")[0] : "User";
+
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/login");
+          return;
+        }
+
+        const res = await fetch("/api/v1/dashboard", {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+        
+        if (res.ok) {
+          const json = await res.json();
+          setData(json);
+        } else if (res.status === 401) {
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      } catch (err) {
+        console.error("Dashboard fetch error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchDashboard();
+  }, [navigate]);
+
+  if (loading) {
+    return <div className="flex h-64 items-center justify-center">Loading dashboard data...</div>;
+  }
+
+  // Fallback if data failed
+  const d = data || {
+    totalProducts: 0,
+    totalStockUnits: 0,
+    lowStockCount: 0,
+    pendingReceipts: 0,
+    pendingDeliveries: 0,
+    transfersScheduled: 0,
+    recentLedger: []
+  };
+
+  const stats = [
+    ["Total Products", d.totalProducts.toString(), "", Package, "bg-blue-50 text-blue-600"],
+    ["Total Stock Units", d.totalStockUnits.toString(), "", Package, "bg-emerald-50 text-emerald-600"],
+    ["Low Stock Items", d.lowStockCount.toString(), "", AlertTriangle, "bg-red-50 text-red-600"],
+    ["Pending Receipts", d.pendingReceipts.toString(), "", ArrowDownToLine, "bg-emerald-50 text-emerald-600"],
+    ["Pending Deliveries", d.pendingDeliveries.toString(), "", Truck, "bg-violet-50 text-violet-600"],
+    ["Active Warehouses", (d.totalWarehouses || 0).toString(), "", WarehouseIcon, "bg-cyan-50 text-cyan-600"],
+  ];
+  
+  // Need to import WarehouseIcon if used.
+  // Wait, let's just use Package for warehouses or ArrowLeftRight for transfers. Let's use ArrowLeftRight for transfers.
 
   return (
     <div>
@@ -32,9 +86,9 @@ export default function Dashboard() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {stats.map(([label, value, change, Icon, color]) => (
+        {stats.map(([label, value, change, Icon, color], i) => (
           <Card
-            key={label}
+            key={i}
             className="bg-white p-6 rounded-xl shadow-md transition-all duration-300 hover:bg-gray-100 hover:scale-105"
           >
             <div className="flex items-start justify-between">
@@ -57,8 +111,8 @@ export default function Dashboard() {
         <Card className="bg-white p-6 rounded-xl shadow-md transition-all duration-300 hover:bg-gray-100 hover:scale-105">
           <div className="mb-5 flex items-center justify-between">
             <div>
-              <h2 className="font-bold">Stock by Category</h2>
-              <p className="text-xs text-slate-500">Current inventory distribution</p>
+              <h2 className="font-bold">Stock Summary</h2>
+              <p className="text-xs text-slate-500">Current inventory volume</p>
             </div>
             <TrendingUp size={20} className="text-blue-600" />
           </div>
@@ -66,17 +120,14 @@ export default function Dashboard() {
             <div className="relative grid h-44 w-44 shrink-0 place-items-center rounded-full bg-[conic-gradient(#2563eb_0_35%,#10b981_35%_60%,#f59e0b_60%_80%,#8b5cf6_80%_92%,#e2e8f0_92%_100%)]">
               <div className="grid h-28 w-28 place-items-center rounded-full bg-white">
                 <div className="text-center">
-                  <b className="text-xl">1,250</b>
+                  <b className="text-xl">{d.totalStockUnits}</b>
                   <div className="text-[10px] text-slate-500">UNITS</div>
                 </div>
               </div>
             </div>
             <div className="space-y-3 text-sm">
-              {["Raw Material 35%", "Finished Goods 25%", "Furniture 20%", "Electronics 12%", "Others 8%"].map((x) => (
-                <div key={x} className="text-slate-600">
-                  {x}
-                </div>
-              ))}
+              <div className="text-slate-600">Total Products: {d.totalProducts}</div>
+              <div className="text-slate-600">Warehouses: {d.totalWarehouses}</div>
             </div>
           </div>
         </Card>
@@ -92,15 +143,16 @@ export default function Dashboard() {
             </Link>
           </div>
           <div className="divide-y divide-slate-100">
-            {operations.map((o) => (
+            {d.recentLedger?.length > 0 ? d.recentLedger.slice(0, 5).map((o) => (
               <div key={o.id} className="flex items-center gap-3 px-5 py-3 text-sm">
-                <div className="w-20 font-semibold text-blue-600">{o.id}</div>
-                <div className="w-24 text-slate-500">{o.type}</div>
-                <div className="flex-1">{o.product}</div>
-                <div className="font-semibold">{o.qty}</div>
-                <StatusBadge status={o.status} />
+                <div className="w-20 font-semibold text-blue-600 truncate" title={o.reference_number || o.id}>{o.reference_number || o.id.substring(0,8)}</div>
+                <div className="w-24 text-slate-500">{o.transaction_type}</div>
+                <div className="flex-1 truncate">{o.product_name}</div>
+                <div className="font-semibold">{o.quantity_change > 0 ? `+${o.quantity_change}` : o.quantity_change}</div>
               </div>
-            ))}
+            )) : (
+              <div className="p-5 text-center text-slate-500 text-sm">No recent operations.</div>
+            )}
           </div>
         </Card>
       </div>

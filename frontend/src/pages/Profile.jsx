@@ -48,7 +48,7 @@ export default function Profile() {
           <div className="grid gap-4 sm:grid-cols-2">
             <Input label="Full Name" defaultValue={currentUser.full_name || "User Account"} />
             <Input label="Email Address" defaultValue={currentUser.email || "user@stocksense.io"} />
-            <Input label="Phone Number" defaultValue="+1 (555) 234-5678" />
+            <Input label="Phone Number" defaultValue="+91 98765 43210" />
             <Input label="Designation / Role" defaultValue={roleTitle} disabled />
 
             <div className="sm:col-span-2 mt-2">

@@ -2,7 +2,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, Package, ArrowDownToLine, Truck, ArrowLeftRight,
   ClipboardMinus, History, Warehouse as WarehouseIcon, Settings,
-  LogOut, Bell, Search, UserCircle, ChevronDown
+  LogOut, Bell, Search, ChevronDown
 } from "lucide-react";
 
 const operationLinks = [
@@ -30,8 +30,39 @@ function SideLink({ to, label, icon: Icon, end }) {
   );
 }
 
+function getCurrentUser() {
+  try {
+    const u = localStorage.getItem("user");
+    if (u) return JSON.parse(u);
+  } catch (e) {}
+  return { full_name: "Sarah Connor", email: "admin@stocksense.io", role: "admin" };
+}
+
+function formatRole(role) {
+  if (role === "admin") return "Admin User";
+  if (role === "inventory_manager") return "Inventory Manager";
+  if (role === "warehouse_staff") return "Warehouse Staff";
+  return role || "Inventory Specialist";
+}
+
+function getInitials(name) {
+  if (!name) return "SC";
+  const parts = name.trim().split(" ");
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  return name.slice(0, 2).toUpperCase();
+}
+
 export default function Layout() {
   const navigate = useNavigate();
+  const currentUser = getCurrentUser();
+  const initials = getInitials(currentUser.full_name);
+  const roleTitle = formatRole(currentUser.role);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
 
   return (
     <div className="min-h-screen bg-[#f6f8fc]">
@@ -56,14 +87,14 @@ export default function Layout() {
         </nav>
 
         <div className="mt-auto">
-          <button onClick={() => navigate("/profile")} className="mb-3 flex w-full items-center gap-3 rounded-xl border border-slate-700 bg-slate-800/70 p-3 text-left">
-            <div className="grid h-9 w-9 place-items-center rounded-full bg-blue-500 text-xs font-bold">RK</div>
+          <button onClick={() => navigate("/profile")} className="mb-3 flex w-full items-center gap-3 rounded-xl border border-slate-700 bg-slate-800/70 p-3 text-left hover:bg-slate-800 transition">
+            <div className="grid h-9 w-9 place-items-center rounded-full bg-blue-600 text-xs font-bold text-white">{initials}</div>
             <div className="min-w-0">
-              <div className="truncate text-sm font-semibold">Rahul Kumar</div>
-              <div className="truncate text-xs text-slate-400">Inventory Manager</div>
+              <div className="truncate text-sm font-semibold">{currentUser.full_name}</div>
+              <div className="truncate text-xs text-slate-400">{roleTitle}</div>
             </div>
           </button>
-          <button onClick={() => navigate("/login")} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-300 hover:bg-slate-800 hover:text-white">
+          <button onClick={handleLogout} className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-300 hover:bg-slate-800 hover:text-white transition">
             <LogOut size={18} /> Logout
           </button>
         </div>
@@ -81,8 +112,9 @@ export default function Layout() {
           </div>
           <div className="ml-auto flex items-center gap-3">
             <button className="relative rounded-xl p-2 hover:bg-slate-100"><Bell size={19} className="text-slate-600"/><span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-red-500"/></button>
-            <button onClick={() => navigate("/profile")} className="flex items-center gap-2 rounded-xl px-2 py-1.5 hover:bg-slate-100">
-              <div className="grid h-8 w-8 place-items-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">RK</div>
+            <button onClick={() => navigate("/profile")} className="flex items-center gap-2 rounded-xl px-2 py-1.5 hover:bg-slate-100 transition">
+              <div className="grid h-8 w-8 place-items-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">{initials}</div>
+              <span className="text-xs font-semibold text-slate-700 hidden sm:inline">{currentUser.full_name}</span>
               <ChevronDown size={15} className="text-slate-400" />
             </button>
           </div>

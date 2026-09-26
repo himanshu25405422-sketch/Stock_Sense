@@ -25,10 +25,20 @@ exports.signup = (req, res) => {
 
 exports.login = (req, res) => {
   const { email, password } = req.body;
-  const user = store.users.find(u => u.email === email);
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required.' });
+  }
+
+  const user = store.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+  if (!user || (user.password && user.password !== password)) {
+    return res.status(401).json({ error: 'Invalid email or password. Please use valid demo credentials.' });
+  }
+
+  const { password: _, ...userWithoutPassword } = user;
   res.json({
     token: `jwt_token_${Date.now()}`,
-    user: user || { id: `usr-${Date.now()}`, email, full_name: 'Inventory Specialist', role: 'inventory_manager' }
+    user: userWithoutPassword
   });
 };
 

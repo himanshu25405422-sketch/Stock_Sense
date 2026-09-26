@@ -11,6 +11,8 @@ const deliveryRoutes = require("./routes/deliveries");
 const transferRoutes = require("./routes/transfers");
 const adjustmentRoutes = require("./routes/adjustments");
 const dashboardRoutes = require("./routes/dashboard");
+const locationRoutes = require("./routes/locations");
+const operationRoutes = require("./routes/operations");
 
 const app = express();
 
@@ -29,6 +31,8 @@ app.use("/api/deliveries", deliveryRoutes);
 app.use("/api/transfers", transferRoutes);
 app.use("/api/adjustments", adjustmentRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/locations", locationRoutes);
+app.use("/api/operations", operationRoutes);
 
 app.get("/api/ledger", (req, res) => {
   res.json(store.stock_ledger);

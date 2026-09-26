@@ -33,10 +33,17 @@ export default function Login() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
       });
-      const data = await res.json();
+
+      const responseText = await res.text();
+      let data = {};
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseErr) {
+        throw new Error("Unable to connect to backend server. Please verify backend is running on port 5000.");
+      }
 
       if (!res.ok) {
-        throw new Error(data.error || "Invalid credentials");
+        throw new Error(data.error || "Invalid email or password. Please use valid demo credentials.");
       }
 
       localStorage.setItem("token", data.token);

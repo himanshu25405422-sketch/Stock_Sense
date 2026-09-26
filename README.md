@@ -9,11 +9,11 @@
 - [Overview](#-overview)
 - [System Architecture](#-system-architecture)
 - [Key Features](#-key-features)
+- [Demo Credentials](#-demo-credentials)
 - [Documentation Deep-Dives](#-documentation-deep-dives)
 - [Tech Stack](#-tech-stack)
 - [Project Structure](#-project-structure)
 - [Quick Start](#-quick-start)
-- [Author](#-author)
 
 ---
 
@@ -58,6 +58,16 @@
 
 ---
 
+## 🔑 Demo Credentials
+
+| Role | Email | Password | Access Level |
+|---|---|---|---|
+| **Admin User** | `admin@stocksense.io` | `admin123` | Full access (Warehouses, Categories, Rules, Audit) |
+| **Inventory Manager** | `manager@stocksense.io` | `manager123` | Operational access & Approvals |
+| **Warehouse Staff** | `staff@stocksense.io` | `staff123` | Daily receipts, picks, packs, and transfers |
+
+---
+
 ## 📚 Documentation Deep-Dives
 
 For comprehensive technical specifications, explore the dedicated documentation files:
@@ -73,7 +83,7 @@ For comprehensive technical specifications, explore the dedicated documentation 
 | Layer | Technology | Description |
 |---|---|---|
 | **Frontend** | React 18 + Vite | Component architecture & fast development server |
-| **Styling** | Vanilla CSS3 | Custom Glassmorphism design system & dark/light theme |
+| **Styling** | Vanilla CSS3 / Tailwind | Custom Glassmorphism design system & dark/light theme |
 | **Icons** | Lucide React | Clean, modern SVG icon suite |
 | **Backend** | Node.js + Express.js | Lightweight REST API server |
 | **Database** | PostgreSQL 12+ | ACID-compliant relational schema (`backend/src/db/schema.sql`) |
@@ -86,18 +96,27 @@ For comprehensive technical specifications, explore the dedicated documentation 
 Stock_Sense/
 ├── backend/
 │   ├── src/
+│   │   ├── config/             # Environment & App Constants
+│   │   ├── controllers/        # Business logic controllers
 │   │   ├── db/
 │   │   │   ├── schema.sql      # PostgreSQL database schema
+│   │   │   ├── init_schema.sql # Complete database DDL
 │   │   │   └── store.js        # Data store & stock ledger logger
+│   │   ├── middleware/         # Auth JWT, CORS, Error Handler
+│   │   ├── models/             # Product, Location, Quant & Operation models
+│   │   ├── routes/             # Express API routers
+│   │   ├── utils/              # Validators, Email service & Logger
 │   │   └── index.js            # Express API server (Port 5000)
 │   └── package.json
 ├── frontend/
 │   ├── src/
-│   │   ├── App.jsx             # Main dashboard & interactive components
-│   │   ├── index.css           # Glassmorphism design system & themes
+│   │   ├── components/         # Layout & Reusable primitives
+│   │   ├── pages/              # Module pages (Dashboard, Products, Receipts...)
+│   │   ├── App.jsx             # Main router & layout
+│   │   ├── index.css           # Glassmorphism design system
 │   │   └── main.jsx            # Entry point
 │   ├── index.html
-│   ├── vite.config.js          # Vite configuration + API proxy
+│   ├── vite.config.js          # Vite configuration
 │   └── package.json
 ├── docs/
 │   ├── ARCHITECTURE.md         # System architecture & data flow
@@ -124,6 +143,5 @@ cd frontend
 npm install
 npm run dev
 ```
-> Application running on `http://localhost:3000`
+> Application running on `http://localhost:5173`
 
----

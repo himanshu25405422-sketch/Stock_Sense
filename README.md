@@ -127,7 +127,3 @@ npm run dev
 > Application running on `http://localhost:3000`
 
 ---
-
-## 👤 Author
-
-- **Priyanshu Raj** ([@pj2411](https://github.com/pj2411))

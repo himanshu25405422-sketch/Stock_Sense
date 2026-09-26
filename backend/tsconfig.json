@@ -6,6 +6,7 @@
     "outDir": "dist",
     "rootDir": ".",
     "strict": true,
+    "allowJs": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -14,6 +15,6 @@
     "paths": { "@prisma/client": ["node_modules/.prisma/client/index"] },
     "types": ["node", "vitest/globals"]
   },
-  "include": ["src/**/*.ts", "prisma/**/*.ts", "tests/**/*.ts"],
+  "include": ["src/**/*", "prisma/**/*", "tests/**/*"],
   "exclude": ["node_modules", "dist"]
 }

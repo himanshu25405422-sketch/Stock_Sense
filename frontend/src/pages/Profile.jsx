@@ -5,7 +5,7 @@ function getCurrentUser() {
     const u = localStorage.getItem("user");
     if (u) return JSON.parse(u);
   } catch (e) {}
-  return { full_name: "Sarah Connor (Admin)", email: "admin@stocksense.io", role: "admin" };
+  return { full_name: "Priyanshu Raj (Admin)", email: "admin@stocksense.io", role: "admin" };
 }
 
 function formatRole(role) {

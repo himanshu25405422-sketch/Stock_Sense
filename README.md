@@ -46,11 +46,11 @@
 
 Use these credentials to sign in on the login page ([http://localhost:5173/login](http://localhost:5173/login)):
 
-| Role | Email | Password | Access & Responsibilities |
-|---|---|---|---|
-| **Admin User** | `admin@stocksense.io` | `admin123` | Full system access (Warehouses, Categories, Reorder Rules, Audit Logs) |
-| **Inventory Manager** | `manager@stocksense.io` | `manager123` | Operational approvals, document validations & stock reports |
-| **Warehouse Staff** | `staff@stocksense.io` | `staff123` | Daily stock receipts, picks, packs, transfers & physical counts |
+| Role | Name | Email | Password | Access & Responsibilities |
+|---|---|---|---|---|
+| **Admin User** | Priyanshu Raj | `admin@stocksense.io` | `admin123` | Full system access (Warehouses, Categories, Reorder Rules, Audit Logs) |
+| **Inventory Manager** | Himanshu Jha | `manager@stocksense.io` | `manager123` | Operational approvals, document validations & stock reports |
+| **Warehouse Staff** | Aditya Pathak | `staff@stocksense.io` | `staff123` | Daily stock receipts, picks, packs, transfers & physical counts |
 
 ---
 

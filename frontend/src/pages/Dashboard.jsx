@@ -17,7 +17,7 @@ function getCurrentUser() {
     const u = localStorage.getItem("user");
     if (u) return JSON.parse(u);
   } catch (e) {}
-  return { full_name: "Sarah Connor" };
+  return { full_name: "Priyanshu Raj" };
 }
 
 export default function Dashboard() {

@@ -101,6 +101,28 @@ const store = {
       reorder_level: 30,
       reorder_quantity: 100,
       stock: { "wh-1": 12, "wh-2": 8, "wh-3": 5 }
+    },
+    {
+      id: "prod-6",
+      sku: "PKG-TP-202",
+      name: "Industrial Packing Tape (50m)",
+      category_id: "cat-3",
+      category_name: "Packaging",
+      uom: "rolls",
+      reorder_level: 500,
+      reorder_quantity: 2000,
+      stock: { "wh-1": 800, "wh-2": 1500, "wh-3": 300 }
+    },
+    {
+      id: "prod-7",
+      sku: "MET-COP-005",
+      name: "Copper Wire Spool 2.5mm",
+      category_id: "cat-1",
+      category_name: "Raw Metals",
+      uom: "spools",
+      reorder_level: 20,
+      reorder_quantity: 50,
+      stock: { "wh-1": 15, "wh-2": 5, "wh-3": 2 }
     }
   ],
 
@@ -189,6 +211,20 @@ const store = {
       items: [
         { product_id: "prod-1", product_name: "Industrial Steel Rod 20mm", quantity_received: 100, unit_price: 45.00 }
       ]
+    },
+    {
+      id: "rec-2",
+      receipt_number: "REC-2026-002",
+      supplier_name: "Global Tech Supplies",
+      warehouse_id: "wh-2",
+      warehouse_name: "West Coast Distribution Center",
+      status: "processed",
+      created_by: "Sarah Connor",
+      created_at: "2026-09-26T09:15:00Z",
+      items: [
+        { product_id: "prod-3", product_name: "ARM Cortex Microcontroller Chip", quantity_received: 500, unit_price: 12.50 },
+        { product_id: "prod-5", product_name: "Optical Laser Rangefinder Sensor", quantity_received: 50, unit_price: 85.00 }
+      ]
     }
   ],
 
@@ -259,6 +295,42 @@ const store = {
       created_by_name: "Alex Rivera",
       timestamp: "2026-09-24T14:30:00Z",
       created_at: "2026-09-24T14:30:00Z"
+    },
+    {
+      id: "ledg-2",
+      operation_id: "op-5",
+      product_id: "prod-6",
+      product_name: "Industrial Packing Tape (50m)",
+      sku: "PKG-TP-202",
+      source_location_id: "loc-vendor-2",
+      destination_location_id: "loc-wh1-main",
+      warehouse_id: "wh-1",
+      warehouse_name: "Central Fulfillment Hub",
+      transaction_type: "RECEIPT",
+      quantity_change: 500,
+      quantity_changed: 500,
+      reference_number: "REC-2026-003",
+      created_by_name: "Priyanshu Raj",
+      timestamp: "2026-09-26T10:15:00Z",
+      created_at: "2026-09-26T10:15:00Z"
+    },
+    {
+      id: "ledg-3",
+      operation_id: "op-6",
+      product_id: "prod-7",
+      product_name: "Copper Wire Spool 2.5mm",
+      sku: "MET-COP-005",
+      source_location_id: "loc-wh1-main",
+      destination_location_id: "loc-customer-2",
+      warehouse_id: "wh-1",
+      warehouse_name: "Central Fulfillment Hub",
+      transaction_type: "DELIVERY",
+      quantity_change: -10,
+      quantity_changed: -10,
+      reference_number: "DEL-2026-005",
+      created_by_name: "Aditya Pathak",
+      timestamp: "2026-09-26T11:45:00Z",
+      created_at: "2026-09-26T11:45:00Z"
     }
   ]
 };
